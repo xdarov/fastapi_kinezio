@@ -17,8 +17,8 @@ def character_pain(db: crud.Session = Depends(get_db)):
 
 
 @router.get('/clients')
-def clients(db: crud.Session = Depends(get_db)):
-    return {'clients': crud.get_clients(db)}
+def client(db: crud.Session = Depends(get_db)):
+    return {'client': crud.get_client(db)}
 
 
 @router.get('/cupping_factors')

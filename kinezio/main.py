@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routing import api
+from routing import api, update
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -14,3 +14,4 @@ app.add_middleware(
 )
 
 app.include_router(api.router)
+app.include_router(update.router)

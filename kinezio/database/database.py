@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, Integer, MetaData, String, create_engine
+from sqlalchemy import Column, Date, Integer, Identity, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from .dbsettings import get_db_settings
 
@@ -19,22 +19,26 @@ def get_db():
 class Bodyparts(Base):
     __tablename__ = 'bodyparts'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Identity(always=True, start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     parts_name = Column(String, nullable=False)
     parent_id = Column(Integer)
+
+    def __repr__(self):
+        return f'{self.parts_name} {self.parent_id}'
+
 
 
 class CharacterPain(Base):
     __tablename__ = 'character_pain'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Identity(always=True, start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     vname = Column(String)
 
 
 class Client(Base):
     __tablename__ = 'client'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Identity(always=True, start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     first_name = Column(String, nullable=False)
     second_name = Column(String)
     surname = Column(String, nullable=False)
@@ -45,19 +49,19 @@ class Client(Base):
 class CuppingFactors(Base):
     __tablename__ = 'cupping_factors'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Identity(always=True, start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     vname = Column(String)
 
 
 class FrequencyOfPain(Base):
     __tablename__ = 'frequency_of_pain'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Identity(always=True, start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     vname = Column(String)
 
 
 class ProvokingFactors(Base):
     __tablename__ = 'provoking_factors'
 
-    id =Column (Integer, primary_key=True)
-    vname =Column (String)
+    id = Column (Integer, primary_key=True)
+    vname = Column (String)
