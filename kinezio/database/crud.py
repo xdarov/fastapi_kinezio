@@ -1,12 +1,11 @@
-from sqlalchemy.orm import Session, joinedload, load_only
-    # selectinload, lazyload, raiseload, contains_eager, noload
+from sqlalchemy.orm import Session, joinedload
 from .database import Bodyparts, CharacterPain, Client, CuppingFactors, \
     FrequencyOfPain, ProvokingFactors
-from .schemas import BodyPartsSchem
 
 '''=========================================='''
 '''=================  API  =================='''
 '''=========================================='''
+
 
 def get_body_parts(db: Session):
     bodyparts = db.query(Bodyparts).order_by(Bodyparts.id).all()
@@ -40,20 +39,35 @@ def get_provoking_factors(db: Session):
         ProvokingFactors.id).all()
     return provoking_factors
 
+
 '''=========================================='''
 '''================  UPDATE  ================'''
 '''=========================================='''
 
+
 def update_body_parts(body_parts_attrs: dict, db: Session):
-    bodyparts = db.query(Bodyparts).filter_by(
+    bodyparts = db.query(Bodyparts).options(joinedload('*')).filter_by(
         parts_name=body_parts_attrs['parts_name']
     )
-    if bodyparts.first() is not None:
-        bodyparts.update({'parent_id': body_parts_attrs['parent_id']})
+    if (before := bodyparts.options(joinedload('*')).first()) is not None:
+        bodyparts.update(body_parts_attrs)
+        res = {
+            'status': 'success' if before != (after := bodyparts.first()) else 'no',
+            'update': {
+                'before': before,
+                'after': after
+            }
+        }
     else:
         bodyparts = Bodyparts(**body_parts_attrs)
         db.add(bodyparts)
+        res = {
+            'status': 'success',
+            'create': bodyparts
+        }
     db.commit()
+    # print(f'=====>{res}')
+    return dict(res)
 
 
 def update_character_pain(character_pain_attrs: dict, db: Session):
@@ -90,6 +104,7 @@ def update_frequency_of_pain(frequency_of_pain_attrs: dict, db: Session):
         frequency_of_pain = FrequencyOfPain(**frequency_of_pain_attrs)
         db.add(frequency_of_pain)
         db.commit()
+
 
 def update_provoking_factors(provoking_factors_attrs: dict, db: Session):
     provoking_factors = db.query(ProvokingFactors).filter_by(

@@ -15,3 +15,8 @@ app.add_middleware(
 
 app.include_router(api.router)
 app.include_router(update.router)
+
+
+@app.get('/')
+def home():
+    return 'You are Home =)'
