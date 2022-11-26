@@ -1,6 +1,7 @@
 from pydantic import BaseModel, validator, Field
 from datetime import date
 
+
 class BodyPartsSchem(BaseModel):
     parts_name: str
     parent_id: None | int
